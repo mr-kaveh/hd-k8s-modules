@@ -88,3 +88,157 @@ A comprehensive project demonstrating the creation, deployment, and management o
 
 
 ![enter image description here](https://raw.githubusercontent.com/mr-kaveh/hd-k8s-modules/refs/heads/master/hello-world-module/Capture.PNG)
+
+### 1. Deploy the Hello World Module
+
+#### Apply the Deployment and Service Manifests:
+
+```
+kubectl apply -f hello-world-deployment.yaml
+kubectl apply -f hello-world-service.yaml
+
+```
+
+### 2. Deploy Secure NGINX
+
+#### Apply the NGINX Deployment and Service Manifests:
+
+```
+kubectl apply -f nginx-deployment.yaml
+kubectl apply -f nginx-service.yaml
+
+```
+
+### 3. Deploy Secured Microservices Application
+
+#### Create the Secret for Backend:
+
+```
+kubectl apply -f backend-secret.yaml
+
+```
+
+#### Apply the Backend Deployment:
+
+
+```
+kubectl apply -f backend-deployment.yaml
+
+```
+
+#### Create backend Secret
+
+1.  **Encode Your Data**:
+    
+
+```
+echo -n 'user:password' | base64
+# Output: dXNlcjpwYXNzd29yZA==
+
+```
+
+2.  **Create** `backend-secret.yaml` with the encoded value:
+    
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-secrets
+type: Opaque
+data:
+  database-url: dXNlcjpwYXNzd29yZA==
+
+```
+
+3.  **Apply the Secret**:
+    
+
+
+
+```
+kubectl apply -f microservices/backend/backend-secret.yaml
+
+```
+
+### Verify the Secret
+
+You can verify that the secret has been created by running the following command:
+
+```
+kubectl get secrets
+
+```
+
+To see the detailed information about the secret:
+
+```
+kubectl describe secret backend-secrets
+```
+
+
+#### Apply the Frontend Deployment:
+
+```
+kubectl apply -f frontend-deployment.yaml
+
+```
+
+### 4. Apply RBAC, Network Policy, and Pod Security Policy
+
+#### Apply the RBAC Role:
+
+```
+kubectl apply -f rbac-role.yaml
+
+```
+
+#### Apply the Network Policy:
+
+```
+kubectl apply -f network-policy.yaml
+
+```
+
+#### Apply the Pod Security Policy:
+
+```
+kubectl apply -f pod-security-policy.yaml
+
+```
+
+### 5. Deploy Using Helm
+
+If you haven't already, install Helm and initialize it in your cluster.
+
+#### Create the Helm Chart Directory:
+
+```
+helm create mychart
+
+```
+
+#### Replace the default templates with your custom templates (deployment.yaml, service.yaml, etc.) in the mychart/templates directory.
+
+#### Install the Helm Chart:
+
+```
+helm install mychart --name myrelease
+
+```
+
+This will create a new release named "myrelease" using the configurations defined in the Helm chart.
+
+### Verify Deployments and Services
+
+To verify everything is deployed correctly, you can use the following kubectl commands:
+
+```
+kubectl get deployments
+kubectl get services
+kubectl get pods
+kubectl get networkpolicy
+kubectl get psp
+kubectl get secrets
+```
+

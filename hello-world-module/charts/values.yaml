@@ -1,0 +1,12 @@
+replicaCount: 1
+image:
+  repository: nginx
+  tag: "1.21"
+  pullPolicy: IfNotPresent
+service:
+  type: LoadBalancer
+  port: 80
+ingress:
+  enabled: true
+  host: your-domain.com
+  tlsSecret: your-tls-secret
